@@ -1,0 +1,32 @@
+services:
+   dev-db:
+    
+     image: postgres:15
+     container_name: nexios-dev-db
+     
+     environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: local-development-db
+      
+     ports:
+       - "5432:5432"
+     volumes:
+      - ./dev-db:/var/lib/postgresql/data
+     restart: always
+     networks:
+      - dev.network
+      
+   admin:
+    image: dpage/pgadmin4
+    container_name: nexios-dev-db-manager
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@nexios.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    networks:
+      - dev.network
+networks:
+    dev.network:
+      driver: bridge
