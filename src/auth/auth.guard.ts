@@ -9,6 +9,12 @@ import { Request } from 'express';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
+interface JwtPayload {
+  id: string;
+  email: string;
+}
+
+
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(private readonly jwtService: JwtService) {}
@@ -20,7 +26,7 @@ export class AuthGuard implements CanActivate {
     }
 
     try {
-      const payload = await this.jwtService.verifyAsync(token, {
+      const payload: JwtPayload = await this.jwtService.verifyAsync(token, {
         algorithms: ['RS256'],
         publicKey: readFileSync(
           resolve(process.env.AUTH_PATH_KEYS || 'keys', 'public.pem'),
