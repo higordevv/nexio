@@ -1,7 +1,7 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { IsEmail, IsOptional, IsString } from "class-validator";
 
 export class EmailDto {
-  @IsNotEmpty() userId: string
+  @IsString() userId: string
   @IsEmail() to: string;
   @IsString() subject: string;
   @IsString() bodyHtml: string;
