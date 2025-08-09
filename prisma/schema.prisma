@@ -1,0 +1,20 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Email {
+  id                String   @id @default(uuid())
+  userId            String
+  to                String
+  subject           String
+  bodyHtml          String
+  status            String   @default("queued") // queued | sent | failed
+  providerMessageId String?  @db.VarChar(255)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
