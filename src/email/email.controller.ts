@@ -16,8 +16,9 @@ export class EmailController {
   async sendEmail(
     @Body() data: EmailDto,
     @CurrentUser() user: JwtPayload,
-  ): Promise<void> {
-    const recordedData: EmailDto = { ...data, userId: user.id, to: user.email };
+  ): Promise<{ message: string }> {
+    const recordedData: EmailDto = { ...data, userId: user.id };
     await this.email_repo.record(recordedData);
+    return { message: "Email sent successfully" };
   }
 }
