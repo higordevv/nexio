@@ -35,7 +35,6 @@ Ele foi projetado para ser rápido, seguro e escalável, integrando-se facilment
 - **BullMQ / Redis**: Gerenciamento de filas e tentativas automáticas  
 - **Nodemailer**: Envio de emails  
 - **Twilio / AWS SNS**: Envio de SMS  
-- **Winston**: Logs estruturados  
 - **Helmet / Rate Limiter**: Segurança  
 
 ---
