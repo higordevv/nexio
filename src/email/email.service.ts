@@ -7,7 +7,7 @@ import { PrismaService } from 'src/database/prisma.service';
 export class EmailService implements EmailRepository {
   constructor(private prisma: PrismaService) {}
 
-  async create(data: EmailDto): Promise<void> {
+  async record(data: EmailDto): Promise<void> {
     await this.prisma.email.create({ data });
   }
 }
