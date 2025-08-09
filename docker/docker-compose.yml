@@ -12,10 +12,10 @@ services:
      ports:
        - "5432:5432"
      volumes:
-      - ./dev-db:/var/lib/postgresql/data
+      - ./nexios-db:/var/lib/postgresql/data
      restart: always
      networks:
-      - dev.network
+      - nexios.network
       
    admin:
     image: dpage/pgadmin4
@@ -26,7 +26,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: admin@nexios.com
       PGADMIN_DEFAULT_PASSWORD: admin
     networks:
-      - dev.network
+      - nexios.network
 networks:
-    dev.network:
+    nexios.network:
       driver: bridge
