@@ -4,6 +4,7 @@ import { EmailModule } from './email/email.module';
 import { PrismaModule } from './database/prisma.module';
 import { BullModule } from '@nestjs/bullmq';
 
+
 @Module({
   imports: [
     AuthModule,
