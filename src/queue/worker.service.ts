@@ -11,24 +11,18 @@ export class EmailProcessor extends WorkerHost {
     super();
   }
 
-  // Processa 1 por vez (concurrency control)
   async process(job: Job<EmailDto>): Promise<any> {
-    console.log(`📧 Processando email para: ${job.data.to}`);
     await this.emailService.sendEmail(job.data);
     return { status: 'enviado' };
   }
 
-  // Webhook ao completar
   @OnWorkerEvent('completed')
-  async onCompleted(job: Job, result: any) {
-    console.log(`✅ Email enviado: ${job.data.to}`);
-   
+  async onCompleted() {
+      await this.emailService.cleanUpEmails();    
   }
 
-  // Webhook ao falhar
   @OnWorkerEvent('failed')
   async onFailed(job: Job, err: any) {
     console.log(`❌ Falhou envio para: ${job.data.to}`, err);
-    // Aqui também pode notificar
   }
 }

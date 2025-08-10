@@ -13,6 +13,11 @@ export class EmailService implements EmailRepository {
     private readonly mailerService: MailerService,
     @InjectQueue('email-queue') private queue: Queue,
   ) {}
+  async cleanUpEmails(): Promise<void> {
+    await this.prisma.email.deleteMany({
+      where: { status: 'sent' },
+    });
+  }
   async sendEmail(data: EmailDto): Promise<void> {
     await this.mailerService.sendMail({
       to: data.to,
@@ -20,12 +25,15 @@ export class EmailService implements EmailRepository {
       text: data.subject,
       html: data.bodyHtml,
     });
+    await this.prisma.email.updateMany({
+      where: { id: data.id },
+      data: { status: 'sent' },
+    });
     console.log(`Email enviado para: ${data.to}`);
   }
 
   async record(data: EmailDto): Promise<void> {
-    await this.prisma.email.create({ data });
-    const job = await this.queue.add('send-email', data);
-    console.log(`Job ${job.id} enfileirado com dados:`, data);
+    const record_email = await this.prisma.email.create({ data });
+    await this.queue.add('send-email', record_email);
   }
 }

@@ -1,6 +1,8 @@
 import { IsEmail, IsOptional, IsString } from "class-validator";
 
 export class EmailDto {
+  @IsString() id: string;
+  @IsString() status: string;
   @IsString() userId: string
   @IsEmail() to: string;
   @IsString() subject: string;
