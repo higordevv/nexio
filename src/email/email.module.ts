@@ -7,21 +7,29 @@ import { EmailService } from './email.service';
 import { BullModule } from '@nestjs/bullmq';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { EmailProcessor } from '../queue/worker.service';
+import { BullBoardModule } from '@bull-board/nestjs';
+import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
+
 @Module({
   controllers: [EmailController],
   imports: [
     PrismaModule,
-    
+
     AuthModule,
     BullModule.registerQueue({
       name: 'email-queue',
       defaultJobOptions: {
         attempts: 5,
         backoff: { type: 'exponential', delay: 1000 },
-        removeOnComplete: true, // Remove automaticamente jobs concluídos da fila
+        removeOnComplete: true, 
       },
     }),
-     MailerModule.forRoot({
+    BullBoardModule.forFeature({
+      name: 'email-queue',
+      adapter: BullMQAdapter,
+    }),
+
+    MailerModule.forRoot({
       transport: {
         service: 'gmail',
         auth: {
@@ -32,7 +40,7 @@ import { EmailProcessor } from '../queue/worker.service';
       defaults: {
         from: `"No Reply" <${process.env.GOOGLE_APP_EMAIL}>`,
       },
-    })
+    }),
   ],
   providers: [
     { provide: 'EmailRepository', useClass: EmailService },
